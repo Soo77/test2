@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soo.test2.dao.MemberDao3">
+<!-- 
+  <resultMap type="Member3" id="MemberMap">
+    <id column="mem_no" property="memberNo"/>
+    <result column="reg_date" property="registeredDate"/>
+    <result column="gender" property="gender"/>
+    <result column="dob" property="dateOfBirth"/>
+    <result column="id" property="id"/>
+    <result column="email" property="email"/>
+    <result column="name" property="name"/>
+    <result column="pwd" property="password"/>
+    <result column="addr_city" property="addressCity"/>
+    <result column="addr_sub" property="addressSuburb"/>
+    <result column="tel" property="tel"/>
+    <result column="profile_photo" property="profilePhoto"/>
+    <collection resultMap="MemberTypeMap" property="memberType"></collection>
+  </resultMap>
+
+  <resultMap type="MemberType" id="MemberTypeMap">
+    <id column="mem_type_no" property="memberTypeNo"/>
+    <result column="mem_type_name" property="memberTypeName"/>
+  </resultMap>
+ -->
+
+  <insert id="insert" parameterType="Member3">
+    insert into test_member3(mem_type_no,reg_date,gender,dob,id,email,name,pwd)
+    values (#{memberType.memberTypeNo},now(),'F',now(),#{id},'test@test.com','hong',password(#{password}));
+  </insert>
+   
+<!--    
+  <select id="logincheck" parameterType="map" resultType="Member">
+    select * from test_member where id=#{id} and pwd=password(#{password})
+  </select>
+   -->
+</mapper>

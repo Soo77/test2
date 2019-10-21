@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soo.test2.dao.MemberDao">
+
+  <insert id="insert" parameterType="Member">
+    insert into test_member (id,pwd,photo)
+    values (#{id},password(#{password}),#{photo});
+  </insert>
+  
+  <select id="logincheck" parameterType="map" resultType="Member">
+    select * from test_member where id=#{id} and pwd=password(#{password})
+  </select>
+  
+</mapper>

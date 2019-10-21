@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>로그인 폼</title>
+</head>
+<body>
+<div id='content'>
+<h1>로그인 폼</h1>
+<form action='login' method='post'>
+    아이디 : <input type='text' name='id'><br>
+    비밀번호 : <input type='text' name='password'><br>
+  <button>로그인</button> 
+</form>
+</div>
+</body>
+</html>

@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Member3 {
 
     private int memberNo;
-    private Date registeredDate;
+    private Date registeredDate; 
     private String gender;
     private Date dateOfBirth;
     private String id;

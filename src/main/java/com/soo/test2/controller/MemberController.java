@@ -12,7 +12,7 @@ import com.soo.test2.dao.MemberDao;
 import com.soo.test2.domain.Member;
 
 @Controller
-public class MemberController {
+public class MemberController { 
   
   @Autowired
   MemberDao testMemberDao;

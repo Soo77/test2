@@ -1,6 +1,7 @@
 package com.soo.test2.controller;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.UUID;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,23 @@ public class MemberController3 {
   @RequestMapping(path = "/member/register2",
       method = RequestMethod.POST)
   public String register(Member3 testMember, 
-      /* MultipartFile photoFile, */
-      MemberType memberType) throws Exception {
+      MultipartFile profile,
+      MemberType memberType,
+      String birthyy,
+      String birthmm,
+      String birthdd,
+      String mail2) throws Exception {
+    
+    String emailAddress = testMember.getEmail() + "@" + mail2;
+    String dob = birthyy + "-" + birthmm + "-" + birthdd;
+    Date testdob = Date.valueOf(dob);
+    testMember.setEmail(emailAddress);
+    testMember.setDateOfBirth(testdob);
     testMember.setMemberType(memberType);
-//    String filename = UUID.randomUUID().toString();
-//    photoFile.transferTo(new File(uploadDir + "/" + filename));
-//    testMember.setProfilePhoto(filename);
+    
+    String filename = UUID.randomUUID().toString();
+    profile.transferTo(new File(uploadDir + "/" + filename));
+    testMember.setProfilePhoto(filename);
     testMemberDao.insert(testMember);
     return "redirect:../board/list";
   }

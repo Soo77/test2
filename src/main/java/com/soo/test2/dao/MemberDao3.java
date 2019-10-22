@@ -10,6 +10,7 @@ public interface MemberDao3 {
   //Member logincheck(Map<String, Object> params)throws Exception;
   public Date stringToDate(Member member) throws Exception;
   //public int loginCheck(String id, String pw) throws Exception;
+  public String findingID(String email) throws Exception;
 }
 
 

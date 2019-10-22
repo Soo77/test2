@@ -11,7 +11,7 @@
 
 <table class='table table-hover'>
 <a href="form">새 글<br></a>
-<a href="../member/ohora2">회원가입</a>
+<a href="../member/ohora2">회원가입  </a>
 <a href="../login_form">로그인</a>
 
 <tr>

@@ -9,15 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.soo.test2.dao.MemberDao;
-import com.soo.test2.dao.MemberDao3;
 
 @Controller
 public class AuthController {
   
   @Resource
   private MemberDao memberDao;
-  @Resource
-  private MemberDao3 memberDao3;
   
   @RequestMapping(path = "login_form",
       method = RequestMethod.GET)
@@ -43,7 +40,7 @@ public class AuthController {
   @RequestMapping(path = "findID",
   method = RequestMethod.POST)
   public String findID(HttpSession session, String email, Model model) throws Exception {
-    String id = memberDao3.findingID(email);
+    String id = memberDao.findingID(email);
     System.out.println("test" + id);
     session.setAttribute("ohoraid", id);
     return "redirect:../app/resultId";

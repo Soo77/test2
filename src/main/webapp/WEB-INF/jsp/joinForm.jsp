@@ -7,8 +7,53 @@
 
 <!-- css 파일 분리 -->
 <link href='../css/join_style.css' rel='stylesheet' style='text/css' />
+<script type="text/JavaScript"
+  src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
+  
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+  function addr() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+          document.getElementById("addressCity").value = data.sido;
+          document.getElementById("addressSuburb").value = data.sigungu;
+        }
+    }).open();
+  }
+</script>
 
-<script type="text/javascript">
+<script>
+    $(document).ready(function(){
+        setDateBox();
+    });    
+ 
+    // select box 연도 , 월 표시
+    function setDateBox(){
+        var dt = new Date();
+        var year = "";
+        var com_year = dt.getFullYear();
+        // 발행 뿌려주기
+        $("#YEAR").append("<option value=''>년도</option>");
+        // 올해 기준으로 -1년부터 +5년을 보여준다.
+        for(var y = (com_year-118); y <= (com_year); y++){
+            $("#YEAR").append("<option value='"+ y +"'>"+ y + " 년" +"</option>");
+        }
+        // 월 뿌려주기(1월부터 12월)
+        var month;
+        $("#MONTH").append("<option value=''>월</option>");
+        for(var i = 1; i <= 12; i++){
+            $("#MONTH").append("<option value='"+ i +"'>"+ i + " 월" +"</option>");
+        }
+        
+        var day;
+        $("#DAY").append("<option value=''>일</option>");
+        for(var i = 1; i <= 31; i++){
+            $("#DAY").append("<option value='"+ i +"'>"+ i + " 일" +"</option>");
+        }
+    }
+ 
     
         // 필수 입력정보인 아이디, 비밀번호가 입력되었는지 확인하는 함수
         function checkValue()
@@ -55,7 +100,11 @@
             location.href="../board/list.jsp";
         }
     </script>
-
+<style>
+#view_file {
+  display: none;
+}
+</style>
 </head>
 <body>
   <!-- div 왼쪽, 오른쪽 바깥여백을 auto로 주면 중앙정렬된다.  -->
@@ -84,29 +133,28 @@
 
         <tr>
           <td id="title">아이디</td>
-          <td><input type="text" name="id" maxlength="50"
-            onkeydown="inputIdChk()"> <input type="button"
-            value="중복확인" onclick="openIdChk()"> <input
-            type="hidden" name="idDuplication" value="idUncheck">
-          </td>
+          <td><input type="text" name="id" id="id" maxlength="50">
+            <div id="id_check"></div></td>
         </tr>
 
         <tr>
           <td id="title">비밀번호</td>
-          <td><input type="password" name="password" maxlength="50">
-          </td>
-        </tr>
-
-        <tr>
-          <td id="title">비밀번호 확인</td>
-          <td><input type="password" name="passwordcheck"
+          <td><input id="pw" type="password" name="password"
             maxlength="50"></td>
         </tr>
 
         <tr>
+          <td id="title">비밀번호 확인</td>
+          <td><input type="password" name="okpw" id="okpw"
+            maxlength="50">
+            <div id="pw_check"></div></td>
+        </tr>
+
+        <tr>
           <td id="title">이름</td>
-          <td><input type="text" name="name" maxlength="50">
-          </td>
+          <td><input type="text" name="name" id="name"
+            maxlength="50">
+            <div id="name_check"></div></td>
         </tr>
 
         <tr>
@@ -117,39 +165,30 @@
 
         <tr>
           <td id="title">프로필 사진</td>
-          <td><input type="file" name="profile"></td>
+          <td><input type="file" name="profile"> <img
+            id="view_file" src="#" width="400px" height="200px" /></td>
         </tr>
 
         <tr>
-          <td id="title">생일</td>
-          <td><input type="text" name="birthyy" maxlength="4"
-            placeholder="년(4자)" size="6"> <select name="birthmm">
-              <option value="">월</option>
-              <option value="01">1</option>
-              <option value="02">2</option>
-              <option value="03">3</option>
-              <option value="04">4</option>
-              <option value="05">5</option>
-              <option value="06">6</option>
-              <option value="07">7</option>
-              <option value="08">8</option>
-              <option value="09">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-          </select> <input type="text" name="birthdd" maxlength="2"
-            placeholder="일" size="4"></td>
+          <td id="title">생년월일</td>
+          <td><select name="birthyy" id="YEAR" title="년도"
+            class="select w80"></select> <select name="birthmm"
+            id="MONTH" title="월" class="select w80"></select> <select
+            name="birthdd" id="DAY" title="일" class="select w80"></select>
+          </td>
         </tr>
 
         <tr>
           <td id="title">이메일</td>
-          <td><input type="text" name="email" maxlength="50">@
-            <select name="mail2">
+          <td><input type="text" id="email" name="email" maxlength="50">@
+            <select name="mail2" id="mail2">
+              <option value="">메일 선택</option>
               <option value="naver.com">naver.com</option>
               <option value="daum.net">daum.net</option>
               <option value="gmail.com">gmail.com</option>
               <option value="nate.com">nate.com</option>
-          </select></td>
+          </select>
+          <div id="email_check"></div></td>
         </tr>
 
         <tr>
@@ -157,15 +196,19 @@
           <td><input type="text" name="tel" /></td>
         </tr>
         <tr>
-          <td id="title">주소 대강</td>
-          <td><input type="text" size="50" name="addressCity" /></td>
-        </tr>
-
-        <tr>
-          <td id="title">주소 상세</td>
-          <td><input type="text" size="50" name="addressSuburb" />
+          <td id="title">주소</td>
+          <td>
+          <input id="addressCity" type="text" size="50" name="addressCity" />
+          <input id="addressSuburb" type="text" size="50" name="addressSuburb" />
+          <input type="button" onclick="addr()" value="주소 검색" />
           </td>
         </tr>
+
+<!--         <tr>
+          <td id="title">주소 상세</td>
+          <td><input id="addressSuburb" type="text" size="50" name="addressSuburb" />
+          </td>
+        </tr> -->
       </table>
       <br>
       <button>가입</button>
@@ -181,6 +224,126 @@
     });
     
   </script>
+
+
+  <!-- 프로필 사진 -->
+  <script>
+    $("#filePath").change(function() {
+        var input = document.getElementById("filePath");
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#view_file').attr('src', e.target.result);
+                }
+            reader.readAsDataURL(input.files[0]);
+        }
+        var dp = document.getElementById("view_file");
+        dp.style.display = "block";
+    });
+   </script>
+
+  <!-- 아이디 유효성 검사(1 = 중복 / 0 != 중복) -->
+  <script>
+  $("#id").blur(function() {
+    var id = $('#id').val();
+    var param = "id="+id;
+    $.ajax({
+      url : 'idCheck',
+      type : 'get',
+      data: param,
+      success : function(result) {
+        if (result >= 1) {
+            $("#id_check").text("사용중인 아이디입니당");
+            $("#id_check").css("color", "red");
+            $("#id").css("color", "red");
+            $("#submit").attr("disabled", true);
+          } else {
+            if(id){
+              $("#id_check").text("사용 가능한 아이디입니당");
+              $("#id_check").css("color", "green");
+              $("#id").css("color", "green");
+              $("#submit").attr("disabled", false);
+            } else if(id == ""){
+              $('#id_check').text('아이디를 입력해주세요 :)');
+              $('#id_check').css('color', 'red');
+              $("#submit").attr("disabled", true);
+            }
+          }
+        }, error : function() {
+            console.log("실패");
+        }
+      });
+    });
+</script>
+
+  <!-- 비밀번호 확인 -->
+<script>
+  $("#okpw").blur(function() {
+        var pw = document.getElementById("pw").value;
+        var okpw = document.getElementById("okpw").value;
+        
+        if (pw != okpw) {
+            $("#pw_check").text("비밀번호가 틀립니다");
+            $("#pw_check").css("color", "red");
+            $("#okpw").css("color", "red");
+            $("#submit").attr("disabled", true);
+        } else if(okpw == ""){
+              $('#pw_check').text('비밀번호를 입력해주세요 :)');
+              $('#pw_check').css('color', 'red');
+              $("#submit").attr("disabled", true);        
+          } else {
+              $("#pw_check").text("비밀번호가 일치합니당");
+              $("#pw_check").css("color", "green");
+              $("#okpw").css("color", "green");
+              $("#submit").attr("disabled", false);
+            }
+    });
+</script>
+
+  <script>
+  $("#name").blur(function() {
+        var name = document.getElementById("name").value;
+        if(name == ""){
+              $('#name_check').text('이름을 입력해주세요 :)');
+              $('#name_check').css('color', 'red');
+              $("#submit").attr("disabled", true);        
+          } 
+    });
+</script>
+
+<script>
+  $("#mail2").change(function() {
+    var email = $('#email').val() + "@" + $('#mail2').val();
+    var param = "email="+email;
+    $.ajax({
+      url : 'emailCheck',
+      type : 'get',
+      data: param,
+      success : function(result) {
+        if (result >= 1) {
+            $("#email_check").text("사용중인 이메일입니당");
+            $("#email_check").css("color", "red");
+            $("#email").css("color", "red");
+            $("#submit").attr("disabled", true);
+          } else {
+            if(email){
+              $("#email_check").text("사용 가능한 이메일입니당");
+              $("#email_check").css("color", "green");
+              $("#email").css("color", "green");
+              $("#submit").attr("disabled", false);
+            } else if(email == ""){
+              $('#email_check').text('이메일을 입력해주세요 :)');
+              $('#email_check').css('color', 'red');
+              $("#submit").attr("disabled", true);
+            }
+          }
+        }, error : function() {
+            console.log("실패");
+        }
+      });
+    });
+</script>
+
 </body>
 </html>
 

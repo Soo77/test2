@@ -4,13 +4,48 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.soo.test2.dao.MemberDao">
 
-  <insert id="insert" parameterType="Member">
-    insert into test_member (id,pwd,photo)
-    values (#{id},password(#{password}),#{photo});
-  </insert>
+	<resultMap type="Member" id="MemberMap">
+		<id column="mem_no" property="memberNo" />
+		<result column="reg_date" property="registeredDate" />
+		<result column="gender" property="gender" />
+		<result column="dob" property="dateOfBirth" />
+		<result column="id" property="id" />
+		<result column="email" property="email" />
+		<result column="name" property="name" />
+		<result column="pwd" property="password" />
+		<result column="addr_city" property="addressCity" />
+		<result column="addr_sub" property="addressSuburb" />
+		<result column="tel" property="tel" />
+		<result column="profile_photo" property="profilePhoto" />
+		<collection resultMap="MemberTypeMap" property="memberType"></collection>
+	</resultMap>
+
+	<resultMap type="MemberType" id="MemberTypeMap">
+		<id column="mem_type_no" property="memberTypeNo" />
+		<result column="mem_type_name" property="memberTypeName" />
+	</resultMap>
+
+
+	<insert id="insert" parameterType="Member">
+		insert into
+		test_member3(mem_type_no,reg_date,gender,dob,id,email,name,pwd,addr_city,addr_sub,tel,profile_photo)
+		values
+		(#{memberType.memberTypeNo},now(),#{gender},#{dateOfBirth},#{id},#{email},#{name},password(#{password}),#{addressCity},#{addressSuburb},#{tel},#{profilePhoto});
+	</insert>
+
+	<select id="findingID" parameterType="String"
+		resultType="String">
+		select id from test_member3 where email=#{email}
+	</select>
+
+
+	<select id="checkOverId" parameterType="String" resultType="int">
+		select count(*) from test_member3 where id=#{id}
+	</select>
   
-  <select id="logincheck" parameterType="map" resultType="Member">
-    select * from test_member where id=#{id} and pwd=password(#{password})
+  <select id="checkOverEmail" parameterType="String" resultType="int">
+    select count(*) from test_member3 where email=#{email}
   </select>
   
+
 </mapper>

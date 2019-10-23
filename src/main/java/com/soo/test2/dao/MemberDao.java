@@ -3,14 +3,16 @@ package com.soo.test2.dao;
 import java.sql.Date;
 import java.util.Map;
 import com.soo.test2.domain.Member;
-import com.soo.test2.domain.Member3;
 
 // DAO 사용 규칙을 정의한다.
 public interface MemberDao {
-  int insert(Member testMember) throws Exception;
+  int insert(Member member) throws Exception;
   Member logincheck(Map<String, Object> params)throws Exception;
   public Date stringToDate(Member member) throws Exception;
-  public int loginCheck(String id, String pw) throws Exception;
+  //public int loginCheck(String id, String pw) throws Exception;
+  public String findingID(String email) throws Exception;
+  int checkOverId(String id);
+  int checkOverEmail(String email);
 }
 
 

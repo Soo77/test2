@@ -179,7 +179,7 @@
           </td>
         </tr>
 
-        <!--         <tr>
+<!--          <tr>
           <td id="title">이메일</td>
           <td><input type="text" id="email" name="email" maxlength="50">@
             <select name="mail2" id="mail2">
@@ -190,18 +190,17 @@
               <option value="nate.com">nate.com</option>
           </select>
           <div id="email_check"></div></td>
-        </tr> -->
-        <div class="form-group">
-          <label class="control-label">이메일</label> <input type="text"
-            id="email" name="email" placeholder="이메일을 입력하세요"
-            class="form-control" />
-          <button type="button" class="btn btn-info" id="emailBtn">이메일
-            발송</button>
-          <button type="button" class="btn btn-info" id="emailAuthBtn">이메일
-            인증</button>
-        </div>
-        <input type="hidden" path="random" id="random"
-          value="${random }" />
+        </tr>  -->
+         <tr>
+          <td id="title">이메일</td>
+          <td><input id="email" type="text" name="email" />
+          
+            <input type="button" onclick="sendMail()" value="전송">
+            
+          </td>
+        </tr>
+        <tr>
+
 
 
         <tr>
@@ -227,7 +226,26 @@
       <input id="cancelbtn" type="button" value="취소">
 
     </form>
+    
+
   </div>
+  
+  <script>
+  function sendMail(){
+    var whatmail = "kimyoulim1016@gmail.com";
+    var email = document.getElementById("email").value;
+     $.ajax({
+       url : 'mailsend',
+       type : 'post',
+       data : "whatmail="+whatmail+ "&email=" +email,
+       success : function(result) {
+         
+       }, error : function() {
+         console.log("실패");
+       }
+     });
+  }
+  </script>
 
   <script>
       var cbtn = document.querySelector("#cancelbtn");

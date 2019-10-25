@@ -2,11 +2,21 @@ package com.soo.test2.controller;
 
 import java.io.File;
 import java.sql.Date;
+import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -73,5 +83,64 @@ public class MemberController {
   @ResponseBody
   public int emailCheck(String email) {
     return testMemberDao.checkOverEmail(email);
+  }
+  
+  
+  @PostMapping("/member/mailsend")
+  public void mailsend(String whatmail, String email) {
+    System.out.println(whatmail);
+    System.out.println(email);
+    
+    String host = "smtp.fastmail.com"; 
+    // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
+    String user = "bitcamppr@fastmail.com"; 
+    // 패스워드
+    String password = "ENCRJ3GAJV56WZG9";      
+
+    // SMTP 서버 정보를 설정한다. 
+    Properties props = new Properties(); 
+    props.put("mail.smtp.host", host); 
+    props.put("mail.smtp.port", 465); 
+    props.put("mail.smtp.auth", "true"); 
+    props.put("mail.smtp.ssl.enable", "true"); 
+    props.put("mail.smtp.ssl.trust", host);
+
+    Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() { 
+      protected PasswordAuthentication getPasswordAuthentication() { 
+        return new PasswordAuthentication(user, password); 
+      } 
+    });
+    
+    // 인증 번호 난수
+    Random rand = new Random();
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < 5; i++) {
+      int index = rand.nextInt(2);
+      switch(index) {
+        case 0:
+          sb.append((char)(rand.nextInt(26)+97));
+          break;
+        case 1:
+          sb.append(rand.nextInt(10));
+          break;
+      }
+    }
+    
+    try { 
+      MimeMessage message = new MimeMessage(session);
+      message.setFrom(new InternetAddress(user));
+      message.addRecipient(Message.RecipientType.TO, new InternetAddress(whatmail)); 
+      // 메일 제목 
+      //message.setSubject("엄과외 인증 비밀번호당~"); 
+      message.setSubject(email); 
+      // 메일 내용 
+      message.setText(email); 
+      
+      // send the message 
+      Transport.send(message); 
+    } catch (MessagingException e) { 
+      e.printStackTrace(); 
+    }
+    
   }
 }

@@ -28,23 +28,23 @@
 
 	<insert id="insert" parameterType="Member">
 		insert into
-		test_member3(mem_type_no,reg_date,gender,dob,id,email,name,pwd,addr_city,addr_sub,tel,profile_photo)
+		test_member5(mem_type_no,reg_date,gender,dob,id,email,name,pwd,addr_city,addr_sub,tel,profile_photo)
 		values
 		(#{memberType.memberTypeNo},now(),#{gender},#{dateOfBirth},#{id},#{email},#{name},password(#{password}),#{addressCity},#{addressSuburb},#{tel},#{profilePhoto});
 	</insert>
 
 	<select id="findingID" parameterType="String"
 		resultType="String">
-		select id from test_member3 where email=#{email}
+		select id from test_member5 where email=#{email}
 	</select>
 
 
 	<select id="checkOverId" parameterType="String" resultType="int">
-		select count(*) from test_member3 where id=#{id}
+		select count(*) from test_member5 where id=#{id}
 	</select>
   
   <select id="checkOverEmail" parameterType="String" resultType="int">
-    select count(*) from test_member3 where email=#{email}
+    select count(*) from test_member5 where email=#{email}
   </select>
   
 

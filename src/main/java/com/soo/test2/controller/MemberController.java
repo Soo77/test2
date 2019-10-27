@@ -13,6 +13,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,10 +87,43 @@ public class MemberController {
   }
   
   
+  
+  
+public class TempKey {
+    
+    private boolean lowerCheck;
+    private int size;
+    
+    public String getKey(int size, boolean lowerCheck) {
+        this.size = size;
+        this.lowerCheck = lowerCheck;
+        return init();
+    }
+    
+    private String init() {
+        Random ran = new Random();
+        StringBuffer sb = new StringBuffer();
+        int num = 0;
+        do {
+            num = ran.nextInt(75)+48;
+            if((num>=48 && num<=57) || (num>=65 && num<=90) || (num>=97 && num<=122)) {
+                sb.append((char)num);
+            }else {
+                continue;
+            }
+        } while (sb.length() < size);
+        if(lowerCheck) {
+            return sb.toString().toLowerCase();
+        }
+        return sb.toString();
+    }
+    
+}
+  
   @PostMapping("/member/mailsend")
-  public void mailsend(String whatmail, String email) {
+  public void mailsend(String whatmail, String content, HttpSession httpSession) {
     System.out.println(whatmail);
-    System.out.println(email);
+    System.out.println(content);
     
     String host = "smtp.fastmail.com"; 
     // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
@@ -125,6 +159,7 @@ public class MemberController {
           break;
       }
     }
+    httpSession.setAttribute("user1", sb);
     
     try { 
       MimeMessage message = new MimeMessage(session);
@@ -132,10 +167,17 @@ public class MemberController {
       message.addRecipient(Message.RecipientType.TO, new InternetAddress(whatmail)); 
       // 메일 제목 
       //message.setSubject("엄과외 인증 비밀번호당~"); 
-      message.setSubject(email); 
+      message.setSubject(content); 
       // 메일 내용 
-      message.setText(email); 
+      message.setText(content);
+//      message.setText("http://localhost:8888/app/auth/verify/email?verification_no='" + sb+ "'"); 
       
+//      message.setSubject("[이메일 인증]");
+//      message.setText(new StringBuffer().append("<h1>메일인증</h1>")
+//              .append("<a href='http://localhost:8080/spring/emailConfirm?key=")
+//              .append(key)
+//              .append("' target='_blenk'>이메일 인증 확인</a>")
+//              .toString());
       // send the message 
       Transport.send(message); 
     } catch (MessagingException e) { 
@@ -143,4 +185,16 @@ public class MemberController {
     }
     
   }
+  
+//  @GetMapping("/auth/verify/email")
+//  public String test111(String key, Model model) {
+//    try {
+//      emailService.emailConfirm(emailConfirmVO);
+//      model.addAttribute("check", true);
+//  } catch (Exception e) {
+//      model.addAttribute("check", false);
+//  }
+//  return "emailConfirm";
+//  }
+  
 }

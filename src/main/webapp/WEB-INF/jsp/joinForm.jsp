@@ -190,14 +190,21 @@
               <option value="nate.com">nate.com</option>
           </select>
           <div id="email_check"></div></td>
+                      <input id="content" type="text" name="content" />
         </tr>  -->
          <tr>
           <td id="title">이메일</td>
-          <td><input id="email" type="text" name="email" />
-          
+          <td><input type="text" id="email" name="email" maxlength="50">@
+            <select name="mail2" id="mail2">
+              <option value="">메일 선택</option>
+              <option value="naver.com">naver.com</option>
+              <option value="daum.net">daum.net</option>
+              <option value="gmail.com">gmail.com</option>
+              <option value="nate.com">nate.com</option>
+          </select>          
+
             <input type="button" onclick="sendMail()" value="전송">
-            
-          </td>
+          <div id="email_check"></div></td>
         </tr>
         <tr>
 
@@ -232,12 +239,16 @@
   
   <script>
   function sendMail(){
-    var whatmail = "kimyoulim1016@gmail.com";
-    var email = document.getElementById("email").value;
+    var whatmail =  $('#email').val() + "@" + $('#mail2').val();
+      //document.getElementById("email").value;
+      //"shimsh3@naver.com";
+    //var email = document.getElementById("email").value;
+    var content = "엄과외 인증메일"
+      //document.getElementById("content").value;
      $.ajax({
        url : 'mailsend',
        type : 'post',
-       data : "whatmail="+whatmail+ "&email=" +email,
+       data : "whatmail="+whatmail+ "&content=" +content,
        success : function(result) {
          
        }, error : function() {

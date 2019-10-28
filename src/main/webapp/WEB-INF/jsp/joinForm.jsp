@@ -179,19 +179,6 @@
           </td>
         </tr>
 
-<!--          <tr>
-          <td id="title">이메일</td>
-          <td><input type="text" id="email" name="email" maxlength="50">@
-            <select name="mail2" id="mail2">
-              <option value="">메일 선택</option>
-              <option value="naver.com">naver.com</option>
-              <option value="daum.net">daum.net</option>
-              <option value="gmail.com">gmail.com</option>
-              <option value="nate.com">nate.com</option>
-          </select>
-          <div id="email_check"></div></td>
-                      <input id="content" type="text" name="content" />
-        </tr>  -->
          <tr>
           <td id="title">이메일</td>
           <td><input type="text" id="email" name="email" maxlength="50">@
@@ -202,9 +189,7 @@
               <option value="gmail.com">gmail.com</option>
               <option value="nate.com">nate.com</option>
           </select>          
-
-            <input type="button" onclick="sendMail()" value="전송">
-          <div id="email_check"></div></td>
+           <div id="email_check"></div></td> 
         </tr>
         <tr>
 
@@ -216,47 +201,25 @@
         </tr>
         <tr>
           <td id="title">주소</td>
-          <td><input id="addressCity" type="text" size="50"
-            name="addressCity" /> <input id="addressSuburb" type="text"
-            size="50" name="addressSuburb" /> <input type="button"
-            onclick="addr()" value="주소 검색" /></td>
+          <td>
+          <input id="addressCity" type="text" maxlength="50" name="addressCity" readonly/><br>
+          <input id="addressSuburb" type="text" maxlength="50" name="addressSuburb" readonly/> 
+          <input type="button" onclick="addr()" value="주소 검색" /></td>
         </tr>
 
-        <!--         <tr>
-          <td id="title">주소 상세</td>
-          <td><input id="addressSuburb" type="text" size="50" name="addressSuburb" />
-          </td>
-        </tr> -->
+
       </table>
       <br>
-      <button>가입</button>
+<!--       <button id="submit">가입</button>  -->
+     <button>가입</button> 
       <input id="cancelbtn" type="button" value="취소">
+
 
     </form>
     
 
   </div>
-  
-  <script>
-  function sendMail(){
-    var whatmail =  $('#email').val() + "@" + $('#mail2').val();
-      //document.getElementById("email").value;
-      //"shimsh3@naver.com";
-    //var email = document.getElementById("email").value;
-    var content = "엄과외 인증메일"
-      //document.getElementById("content").value;
-     $.ajax({
-       url : 'mailsend',
-       type : 'post',
-       data : "whatmail="+whatmail+ "&content=" +content,
-       success : function(result) {
-         
-       }, error : function() {
-         console.log("실패");
-       }
-     });
-  }
-  </script>
+
 
   <script>
       var cbtn = document.querySelector("#cancelbtn");
@@ -348,14 +311,18 @@
           $('#name_check').text('이름을 입력해주세요 :)');
           $('#name_check').css('color', 'red');
           $("#submit").attr("disabled", true);
+        } else {
+          $('#name_check').text('');
         }
       });
     </script>
 
   <script>
       $("#mail2").change(function() {
+        console.log($('#id').css('color'));
         var email = $('#email').val() + "@" + $('#mail2').val();
-        var param = "email=" + email;
+        var id = $('#id').val();
+        var param = "email=" + email + "&id=" + id;
         $.ajax({
           url : 'emailCheck',
           type : 'get',
@@ -367,11 +334,19 @@
               $("#email").css("color", "red");
               $("#submit").attr("disabled", true);
             } else {
+
               if (email) {
-                $("#email_check").text("사용 가능한 이메일입니당");
-                $("#email_check").css("color", "green");
-                $("#email").css("color", "green");
-                $("#submit").attr("disabled", false);
+                if ($('#id').css('color')=="rgb(255, 0, 0)") {
+                  $("#email_check").text("사용 가능한 이메일입니당");
+                  $("#email_check").css("color", "green");
+                  $("#email").css("color", "green");
+                  $("#submit").attr("disabled", true);
+                } else {
+                  $("#email_check").text("사용 가능한 이메일입니당");
+                  $("#email_check").css("color", "green");
+                  $("#email").css("color", "green");
+                  $("#submit").attr("disabled", false);
+                }
               } else if (email == "") {
                 $('#email_check').text('이메일을 입력해주세요 :)');
                 $('#email_check').css('color', 'red');
@@ -385,64 +360,6 @@
         });
       });
     </script>
-
-  <script>
-$(function(){
-  /*
-  이메일 인증 버튼 클릭시 발생하는 이벤트
-  */
-  $(document).on("click", "#emailBtn", function(){
-  /* 이메일 중복 체크 후 메일 발송 비동기 처리 */
-  $.ajax({
-    beforeSend: function(){
-      loadingBarStart();
-  },
-  type:"get",
-  url : "<c:url value='/login/createEmailCheck.do'/>",
-  data : "userEmail=" + $("#userEmail").val() + "&random=" + $("#random").val(),
-  //data: "userEmail="+encodeURIComponent($('#userEmail').val()),
-  /* encodeURIComponent
-  예를들어, http://a.com?name=egoing&job=programmer 에서 &job=programmer
-  중 '&'는 하나의 파라미터가 끝나고 다음 파라미터가 온다는 의미이다.
-  그런데 다음과 같이 job의 값에 &가 포함된다면 시스템은 job의 값을 제대로 인식할수 없게 된다. */
-  success : function(data){
-  alert("사용가능한 이메일입니다. 인증번호를 입력해주세요.");
-  }
-  },
-  error: function(data){
-  alert("에러가 발생했습니다.");
-  return false;
-  }
-  })
-  })
-  /*
-  이메일 인증번호 입력 후 인증 버튼 클릭 이벤트
-  */
-  $(document).on("click", "#emailAuthBtn", function(){
-  $.ajax({
-  beforeSend: function(){
-  loadingBarStart();
-  },
-  type:"get",
-  url:"<c:url value='/login/emailAuth.do'/>",
-  data:"authCode=" + $('#emailAuth').val() + "&random=" + $("#random").val(),
-  success:function(data){
-  if(data=="complete"){
-  alert("인증이 완료되었습니다.");
-  }else if(data == "false"){
-  alert("인증번호를 잘못 입력하셨습니다.")
-  }
-  },
-  complete: function(){
-  loadingBarEnd();
-  },
-  error:function(data){
-  alert("에러가 발생했습니다.");
-  }
-  });
-  });
-  });
-</script>
 
 
 

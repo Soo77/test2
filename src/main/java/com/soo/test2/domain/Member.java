@@ -16,17 +16,21 @@ public class Member {
     private String addressSuburb;
     private String tel;
     private String profilePhoto;
+    private int userEmailChecked;
+    private String activationKey;
     
     private MemberType memberType;
     
     
+
     @Override
     public String toString() {
       return "Member [memberNo=" + memberNo + ", registeredDate=" + registeredDate + ", gender="
           + gender + ", dateOfBirth=" + dateOfBirth + ", id=" + id + ", email=" + email + ", name="
           + name + ", password=" + password + ", addressCity=" + addressCity + ", addressSuburb="
-          + addressSuburb + ", tel=" + tel + ", profilePhoto=" + profilePhoto + ", memberType="
-          + memberType + "]";
+          + addressSuburb + ", tel=" + tel + ", profilePhoto=" + profilePhoto
+          + ", userEmailChecked=" + userEmailChecked + ", activationKey=" + activationKey
+          + ", memberType=" + memberType + "]";
     }
     public int getMemberNo() {
       return memberNo;
@@ -105,6 +109,18 @@ public class Member {
     }
     public void setMemberType(MemberType memberType) {
       this.memberType = memberType;
+    }
+    public int getUserEmailChecked() {
+      return userEmailChecked;
+    }
+    public void setUserEmailChecked(int userEmailChecked) {
+      this.userEmailChecked = userEmailChecked;
+    }
+    public String getActivationKey() {
+      return activationKey;
+    }
+    public void setActivationKey(String activationKey) {
+      this.activationKey = activationKey;
     }
     
     

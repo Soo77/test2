@@ -17,6 +17,7 @@
 		<result column="addr_sub" property="addressSuburb" />
 		<result column="tel" property="tel" />
 		<result column="profile_photo" property="profilePhoto" />
+		<result column="activation_key" property="activationKey" />
 		<collection resultMap="MemberTypeMap" property="memberType"></collection>
 	</resultMap>
 
@@ -28,9 +29,9 @@
 
 	<insert id="insert" parameterType="Member">
 		insert into
-		test_member5(mem_type_no,reg_date,gender,dob,id,email,name,pwd,addr_city,addr_sub,tel,profile_photo)
+		test_member5(mem_type_no,reg_date,gender,dob,id,email,name,pwd,addr_city,addr_sub,tel,profile_photo,activation_key)
 		values
-		(#{memberType.memberTypeNo},now(),#{gender},#{dateOfBirth},#{id},#{email},#{name},password(#{password}),#{addressCity},#{addressSuburb},#{tel},#{profilePhoto});
+		(#{memberType.memberTypeNo},now(),#{gender},#{dateOfBirth},#{id},#{email},#{name},password(#{password}),#{addressCity},#{addressSuburb},#{tel},#{profilePhoto},#{activationKey});
 	</insert>
 
 	<select id="findingID" parameterType="String"
@@ -47,5 +48,12 @@
     select count(*) from test_member5 where email=#{email}
   </select>
   
+<!--     <select id="updateCheck" parameterType="String" resultType="int">
+    UPDATE test_member5 SET userEmailChecked = 1 WHERE activation_key = #{activationKey}
+  </select> -->
+  
+  <update id="updateCheck" parameterType="String" >
+      UPDATE test_member5 SET userEmailChecked = 1 WHERE activation_key = #{activationKey}
+  </update>
 
 </mapper>
